@@ -1,0 +1,12 @@
+{
+  "name": "@silloky-squidgame/master",
+  "packageManager": "yarn@4.6.0",
+  "private": true,
+  "version": "0.0.0",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "yarn workspaces foreach -Aptiv run dev"
+  }
+}
