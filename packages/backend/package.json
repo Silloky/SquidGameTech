@@ -2,15 +2,23 @@
   "name": "@silloky-squidgame/backend",
   "packageManager": "yarn@4.6.0",
   "devDependencies": {
+    "@silloky-squidgame/types": "workspace:*",
+    "@types/express": "^5",
     "@types/node": "^22.14.1",
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   },
   "scripts": {
-    "dev": "nodemon --watch src --exec ts-node src/index.ts",
+    "dev": "concurrently --prefix none --kill-others \"mongod --config ./mongodb.dev.conf\" \"nodemon --watch src --watch ../types/src --exec ts-node src/index.ts\"",
     "build": "tsc --outDir dist"
   },
   "version": "0.0.0",
-  "private": "true"
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongoose": "^8.13.2",
+    "nodeenv": "^3.0.75"
+  }
 }

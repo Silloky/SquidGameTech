@@ -12,3 +12,7 @@
 #!.yarn/cache
 .pnp.*
 node_modules
+
+data
+credentials.md
+.env.dev

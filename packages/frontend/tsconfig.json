@@ -3,5 +3,11 @@
   "compilerOptions": {
     "strict": true,
     "jsx": "react-native",
-  }
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+    }
+  },
+  "include": ["src/**/*", "index.ts"],
+  "exclude": ["node_modules"]
 }
