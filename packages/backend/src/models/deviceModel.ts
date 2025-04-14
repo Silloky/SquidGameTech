@@ -9,21 +9,20 @@ const devicesSchema = new mongoose.Schema<Device>({
     deviceType: { type: String, required: true },
     purposes: { type: [String], required: true },
     live: { type: Boolean, required: true },
-    user: { type: String, required: true },
-    userName: { type: String, required: true },
-})
-devicesSchema.virtual("id").get(function () {
-    return this._id.toHexString()
-})
+    username: { type: String, required: true },
+}, {collection: "devices"})
+// devicesSchema.virtual("id").get(function () {
+//     return this._id.toHexString()
+// })
 
-devicesSchema.set("toJSON", {
-    virtuals: true,
-    transform: (doc, ret, options) => {
-        delete ret._id
-        delete ret.__v
-    },
-})
+// devicesSchema.set("toJSON", {
+//     virtuals: true,
+//     transform: (doc, ret, options) => {
+//         delete ret._id
+//         delete ret.__v
+//     },
+// })
 
-const DevicesModel = mongoose.model<Device>("staff", devicesSchema)
+const DevicesModel = mongoose.model<Device>("devices", devicesSchema)
 
 export default DevicesModel

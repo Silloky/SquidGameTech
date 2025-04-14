@@ -1,3 +1,4 @@
 export * from './staff';
-export * from './permission'
+export * from './permissions'
 export * from './device'
+export * from './auth'

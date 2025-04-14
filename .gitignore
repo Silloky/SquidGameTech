@@ -15,4 +15,4 @@ node_modules
 
 data
 credentials.md
-.env.dev
+.env.dev*
