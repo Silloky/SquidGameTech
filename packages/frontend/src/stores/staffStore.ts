@@ -18,7 +18,6 @@ const useStaffStore = create<StaffState>((set) => ({
         try {
             const response = await post('/auth', authData, {});
             const authRes = response.data as AuthRes;
-            console.log(authRes)
             set({ 
                 isLoggedIn: true, 
                 token: authRes.token, 
