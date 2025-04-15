@@ -1,6 +1,7 @@
 import express from 'express';
 import ws from 'ws';
-import http from 'http'; // Import the http module
+import http from 'http';
+import cors from 'cors';
 import mongoose from 'mongoose';
 import { authenticate } from './auth';
 import StaffModel from './models/staffModel';
@@ -11,6 +12,7 @@ mongoose.connect(process.env.MONGO_URI!)
     .catch(err => console.error('MongoDB connection error:', err));
 
 const app = express();
+app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const PORT = 3000;

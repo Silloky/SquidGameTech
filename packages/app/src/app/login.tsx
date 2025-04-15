@@ -1,23 +1,22 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { useFonts, BrunoAceSC_400Regular } from '@expo-google-fonts/bruno-ace-sc';
-import { create } from 'zustand';
 import useStaffStore from '../stores/staffStore';
 import { RestResError } from '../utils/rest';
-
+import { Href, useRouter } from 'expo-router';
 
 export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const { login } = useStaffStore();
+    const router = useRouter();
 
     const handleSubmit = async () => {
-        console.log(username, password)
-        login(username, password)
+        login(username.trim(), password.trim())
             .then(() => {
                 setUsername(() => '');
                 setPassword(() => '');
-                Alert.alert('Success', 'You have been successfully logged in.');
+                router.replace('/' as Href)
             })
             .catch((error: RestResError) => {
                 Alert.alert('Error', error.error);
@@ -75,7 +74,7 @@ const styles = StyleSheet.create({
         fontFamily: "BrunoAceSC_400Regular",
     },
     form: {
-        width: "80%",
+        width: 300,
         backgroundColor: '#880E4F',
         padding: 20,
         borderRadius: 8
