@@ -1,4 +1,4 @@
-import { Device } from "@silloky-squidgame/types"
+import { Device } from "types"
 import mongoose from "mongoose"
 
 const devicesSchema = new mongoose.Schema<Device>({

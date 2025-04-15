@@ -1,13 +1,9 @@
 {
-  "name": "@silloky-squidgame/types",
+  "name": "types",
   "packageManager": "yarn@4.6.0",
   "devDependencies": {
     "typescript": "^5.8.3"
   },
-  "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch"
-  },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts"
+  "main": "src/index.ts",
+  "types": "src/index.ts"
 }

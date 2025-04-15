@@ -9,7 +9,7 @@ import { RestResError } from '../utils/rest';
 export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const {login} = useStaffStore();
+    const { login } = useStaffStore();
 
     const handleSubmit = async () => {
         console.log(username, password)

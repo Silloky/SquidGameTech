@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from "bcryptjs";
 import StaffModel from './models/staffModel';
-import { AuthReq, AuthRes, Permissions } from '@silloky-squidgame/types';
+import { AuthReq, AuthRes, Permissions } from 'types';
 import RolesModel from './models/rolesModel';
 
 const calculateOverallPermissions = async (roles: string[], grantedPermissions: string[], deniedPermissions: string[]) => {

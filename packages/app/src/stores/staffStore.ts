@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { StaffState, AuthReq, AuthRes, Permissions } from '@silloky-squidgame/types';
+import { StaffState, AuthReq, AuthRes, Permissions } from 'types';
 import { post, RestResError } from '../utils/rest';
 
 

@@ -1,8 +1,7 @@
 {
-  "name": "@silloky-squidgame/backend",
+  "name": "backend",
   "packageManager": "yarn@4.6.0",
   "devDependencies": {
-    "@silloky-squidgame/types": "workspace:*",
     "@types/express": "^5",
     "@types/jsonwebtoken": "^9",
     "@types/node": "^22.14.1",

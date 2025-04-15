@@ -1,4 +1,4 @@
-import { InternalStaffMember } from "@silloky-squidgame/types"
+import { InternalStaffMember } from "types"
 import mongoose from "mongoose"
 
 const staffSchema = new mongoose.Schema<InternalStaffMember>({
