@@ -1,11 +1,11 @@
 export type Device = {
-    id: string;
+    id?: string;
     os: string;
     osVersion: string;
     device: string;
     deviceType: string;
     purposes: ('s-out' | 's-in' | 'v-in' | 'v-out' | 'gc-in' | 'gc-out')[]; 
     // Sound output | Sound input | Video input | Video output | Game control input | Game control output
-    live: boolean;
-    username: string;
+    live?: boolean;
+    username?: string;
 }

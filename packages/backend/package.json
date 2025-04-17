@@ -11,11 +11,13 @@
     "cross-env": "^7.0.3",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "ts-patch": "^3.3.0",
+    "typescript": "~5.8.3"
   },
   "scripts": {
     "dev": "concurrently --prefix none --kill-others \"mongod --config ./mongodb.dev.conf\" \"nodemon --watch src --watch ../types/src --exec ts-node src/index.ts\"",
-    "build": "tsc --outDir dist"
+    "build": "tsc --outDir dist",
+    "prepare": "ts-patch install"
   },
   "version": "0.0.0",
   "dependencies": {
@@ -25,6 +27,8 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.2",
+    "socket.io": "^4.8.1",
+    "typia": "^9.1.1",
     "ws": "^8.18.1"
   }
 }

@@ -5,7 +5,7 @@ import StaffModel from './models/staffModel';
 import { AuthReq, AuthRes, Permissions } from 'types';
 import RolesModel from './models/rolesModel';
 
-const calculateOverallPermissions = async (roles: string[], grantedPermissions: string[], deniedPermissions: string[]) => {
+export const calculateOverallPermissions = async (roles: string[], grantedPermissions: string[], deniedPermissions: string[]) => {
     const rolesData = await RolesModel.find({ name: { $in: roles } })
         .select("permissions")
         .lean()

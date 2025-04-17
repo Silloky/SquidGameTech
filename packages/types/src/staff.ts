@@ -22,6 +22,6 @@ export interface StaffState {
     token: string | null;
     username: string | null;
     permissions: Permissions;
-    login: (username: string, password: string) => Promise<void>;
-    logout: () => void;
+    login?: (username: string, password: string) => Promise<void>;
+    logout?: () => void;
 }
