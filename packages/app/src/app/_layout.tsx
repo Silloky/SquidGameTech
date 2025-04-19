@@ -6,6 +6,8 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '@/constants/Colors';
 import { StatusBar } from 'expo-status-bar';
 import * as NavigationBar from 'expo-navigation-bar';
+import { useFonts, BrunoAceSC_400Regular } from '@expo-google-fonts/bruno-ace-sc';
+import { Oxanium_400Regular } from '@expo-google-fonts/oxanium'
 
 SplashScreen.preventAutoHideAsync();
 SplashScreen.setOptions({
@@ -17,6 +19,14 @@ export default function Layout() {
 
   NavigationBar.setBackgroundColorAsync(Colors.dogwood);
   SplashScreen.hideAsync()
+
+  let [fontsLoaded] = useFonts({
+    BrunoAceSC_400Regular,
+    Oxanium_400Regular
+  });
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors.dogwood }}>

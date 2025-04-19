@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
-import { useFonts, BrunoAceSC_400Regular } from '@expo-google-fonts/bruno-ace-sc';
 import useStaffStore from '../stores/staffStore';
 import { RestResError } from '../utils/rest';
 import { Href, useRouter } from 'expo-router';
@@ -22,13 +21,6 @@ export default function Login() {
                 Alert.alert('Error', error.error);
             });
     };
-
-    let [fontsLoaded] = useFonts({
-        BrunoAceSC_400Regular,
-    });
-    if (!fontsLoaded) {
-        return null;
-    }
 
     return (
         <View style={styles.container}>
