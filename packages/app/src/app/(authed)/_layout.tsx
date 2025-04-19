@@ -3,15 +3,16 @@ import { Redirect, Stack } from 'expo-router';
 import React from 'react';
 
 export default function RootLayout() {
-  const staff = useStaffStore()
-  if (!staff.isLoggedIn) {
-    return <Redirect href="/login" />
-  }
+    const isLoggedIn = useStaffStore(state => state.isLoggedIn)
 
-  return (
-    <Stack screenOptions={{
-      headerShown: false,
-      animation: 'slide_from_right'
-    }}/>
-  );
+    if (!isLoggedIn) {
+        return <Redirect href="/login" />
+    }
+
+    return (
+        <Stack screenOptions={{
+            headerShown: false,
+            animation: 'slide_from_right'
+        }} />
+    );
 }

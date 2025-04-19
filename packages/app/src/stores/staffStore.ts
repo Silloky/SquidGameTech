@@ -1,10 +1,10 @@
 import { create } from 'zustand';
-import { StaffState, AuthReq, AuthRes, Permissions } from 'types';
+import { StaffStateApp, AuthReq, AuthRes, Permissions } from 'types';
 import { post, RestResError } from '../utils/rest';
+import { initializeSocket, getSocket } from '@/utils/socket';
+import useDeviceStore from './deviceStore';
 
-
-
-const useStaffStore = create<StaffState>((set) => ({
+const useStaffStore = create<StaffStateApp>()((set) => ({
     isLoggedIn: false,
     token: null,
     username: null,
@@ -15,20 +15,42 @@ const useStaffStore = create<StaffState>((set) => ({
             password: password,
         };
 
+        let authRes: AuthRes;
         try {
             const response = await post('/auth', authData, {});
-            const authRes = response.data as AuthRes;
-            set({ 
-                isLoggedIn: true, 
-                token: authRes.token, 
-                username: username, 
-                permissions: new Permissions(authRes.permissions) 
-            });
+            authRes = response.data as AuthRes;
+            set({
+                isLoggedIn: true
+            })
         } catch (error: any) {
             throw error as RestResError;
         }
+
+        const socket = initializeSocket(authRes.token, process.env.EXPO_PUBLIC_BASE_URL!);
+
+        socket.on('connect', () => {
+            set({
+                token: authRes.token,
+                username: username,
+                permissions: new Permissions(authRes.permissions),
+                socket: socket
+            });
+            useDeviceStore.getState().login();
+        })
+
+        socket.connect()
     },
-    logout: () => set({ isLoggedIn: false, token: null, username: null, permissions: {} as Permissions }),
+    logout: async () => {
+        getSocket()?.disconnect()
+        set({
+            isLoggedIn: false, 
+            token: null, 
+            username: null, 
+            permissions: {} as Permissions, 
+            socket: null 
+        })
+    },
+    socket: null,
 }));
 
 export default useStaffStore;

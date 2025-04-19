@@ -1,4 +1,5 @@
 import { Permissions } from "./permissions";
+import { ClientSocketAug } from "./ws";
 
 export type StaffRole = {
     _id?: string;
@@ -17,11 +18,15 @@ export type InternalStaffMember = {
     online: boolean;
 }
 
-export interface StaffState {
+export interface StaffStateCommon {
     isLoggedIn: boolean;
     token: string | null;
     username: string | null;
     permissions: Permissions;
-    login?: (username: string, password: string) => Promise<void>;
-    logout?: () => void;
+}
+
+export interface StaffStateApp extends StaffStateCommon {
+    login: (username: string, password: string) => Promise<void>;
+    logout: () => Promise<void>;
+    socket: ClientSocketAug | null;
 }

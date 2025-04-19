@@ -1,7 +1,5 @@
 import { Slot } from 'expo-router';
-import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -17,26 +15,12 @@ SplashScreen.setOptions({
 
 export default function Layout() {
 
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null; // Or a loading indicator
-  }
-
-
   NavigationBar.setBackgroundColorAsync(Colors.dogwood);
+  SplashScreen.hideAsync()
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors.dogwood }}>
-      <StatusBar style="light" backgroundColor="transparent" translucent={true} />
+      <StatusBar style="light" backgroundColor={Colors.dogwood} translucent={true} />
       <SafeAreaProvider>
         <SafeAreaView style={styles.container}>
           <Slot />

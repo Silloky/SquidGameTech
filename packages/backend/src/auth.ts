@@ -46,6 +46,10 @@ export const authenticate = async (req: Request, res: Response): Promise<void> =
         username: username,
         name: result.name
     };
+
+    result.online = true
+    result.save()
+
     res.json(authResponse);
     return;
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { useFonts, BrunoAceSC_400Regular } from '@expo-google-fonts/bruno-ace-sc';
 import useStaffStore from '../stores/staffStore';
@@ -6,9 +6,9 @@ import { RestResError } from '../utils/rest';
 import { Href, useRouter } from 'expo-router';
 
 export default function Login() {
+    const { login } = useStaffStore();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const { login } = useStaffStore();
     const router = useRouter();
 
     const handleSubmit = async () => {

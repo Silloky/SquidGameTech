@@ -1,11 +1,12 @@
 import { Permissions, ClientToServerEvents, wsCodes } from 'types';
 import jwt from 'jsonwebtoken';
 import StaffModel from '../models/staffModel';
-import { StaffState } from 'types';
+import { StaffStateCommon } from 'types';
 import { calculateOverallPermissions } from '../auth';
 import { ServerAug, ServerSocketAug } from 'types';
+import DevicesModel from '../models/deviceModel';
 
-type HandlerFunction = (socket: ServerSocketAug, eventName: string, data: any) => void;
+type HandlerFunction = (eventName: string, data: any, socket: ServerSocketAug, ack?: Function) => void;
 
 const handlers: { [K in keyof ClientToServerEvents | `${string}.*`]?: HandlerFunction } = {
     'devices.*': require('./deviceHandler').default,
@@ -37,34 +38,46 @@ export default async function handleWS(socket: ServerSocketAug, io: ServerAug) {
             return;
         }
 
-        const staffState: StaffState = {
+        const staffState: StaffStateCommon = {
             isLoggedIn: true,
             token: token,
             username: staff.username,
             permissions: new Permissions(await calculateOverallPermissions(staff.roles, staff.grantedPermissions, staff.deniedPermissions)),
         };
-
         socket.data.user = staffState;
-        socket.send("connected");
+        socket.emit("connected");
 
         socket.on('disconnect', async () => {
-            await StaffModel.findOneAndUpdate(
-                { username: socket.data.user.username },
-                { $set: { online: false } }
-            )
+            if (socket.data.device) {
+                await DevicesModel.findOneAndUpdate(
+                    { id: socket.data.device.id },
+                    { live: false }
+                )
+            }
+            if ((await DevicesModel.countDocuments({$and: [{username: socket.data.user.username}, {live: true}]})) == 0){
+                StaffModel.findOneAndUpdate(
+                    { username: socket.data.user.username },
+                    { $set: { online: false } }
+                )
+            }
         })
 
-        socket.onAny(((eventName: keyof ClientToServerEvents, data) => {
+        socket.onAny(((eventName: keyof ClientToServerEvents, data, ack) => {
+            console.log(eventName)
+            let handled = false;
             for (const eventPattern in handlers) {
-                if (eventName.match(new RegExp(eventPattern.replace(/\*/g, ''))) || eventName in Object.keys(handlers)) {
+                const regex = new RegExp(`^${eventPattern.replace(/\*/g, '.*')}$`);
+                if (eventName.match(regex)) {
                     const handler = handlers[eventPattern as keyof typeof handlers];
                     if (handler) {
-                        handler(socket, eventName, data);
+                        handler(eventName, data, socket, ack);
+                        handled = true;
+                        break;
                     }
-                    return;
-                } else {
-                    socket.emit('error', wsCodes.UNEXISTENT_EVENT, 'Unexistent event ' + eventName)
                 }
+            }
+            if (!handled) {
+                socket.emit('error', wsCodes.UNEXISTENT_EVENT, 'Unexistent event ' + eventName);
             }
         }))
 

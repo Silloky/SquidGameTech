@@ -1,5 +1,5 @@
 import { Device } from "./device";
-import { StaffState } from "./staff";
+import { StaffStateCommon } from "./staff";
 import { Server, Socket as ServerSocket} from "socket.io";
 import { Socket } from "socket.io-client";
 
@@ -22,22 +22,35 @@ type NestedServerToClientEvents = {
     connected: () => void;
     message: (method: string) => void;
     error: (code: number, message: string) => void;
-    devices: {
-        "add.confirm": (code: number, data: Device) => void;
-        "remove.confirm": (code: number, data: void) => void;
-        "logoff.confirm": (code: number, data: void) => void;
-        "modifyPurposes.confirm": (code: number, data: void) => void;
-    }
+    // devices: {
+    //     "add.confirm": (code: number, data: Device) => void;
+    //     "remove.confirm": (code: number, data: void) => void;
+    //     "logoff.confirm": (code: number, data: void) => void;
+    //     "modifyPurposes.confirm": (code: number, data: void) => void;
+    // }
 }
 
 type NestedClientToServerEvents = {
-    message: (method: number) => void;
+    message: (method: number, ack: (response: { code: number; }) => void) => void;
     disconnect: () => void;
     devices: {
-        add: (socket: ServerSocketAug, device: Device) => void;
-        logoff: (socket: ServerSocketAug, deviceId: Device['device']) => void;
-        remove: (socket: ServerSocketAug, deviceId: Device['device']) => void;
-        modifyPurposes: (socket: ServerSocketAug, deviceId: Device['device'], newPurposes: Device['purposes']) => void;
+        add: (
+            data: Device, 
+            ack: (response: { code: number; data: Device }) => void
+        ) => void;
+        // logoff: (
+        //     data: Device['device'], 
+        //     ack: (response: { code: number; }) => void
+        // ) => void;
+        remove: (
+            data: Device['device'], 
+            ack: (response: { code: number; }) => void
+        ) => void;
+        modifyPurposes: (
+            data: { deviceId: Device['device'], 
+            newPurposes: Device['purposes'] }, 
+            ack: (response: { code: number; }) => void
+        ) => void;
     };
     games: {
         start: (game: any) => void;
@@ -67,7 +80,7 @@ export interface InterServerEvents {
 }
 
 export interface SocketData {
-    user: StaffState;
+    user: StaffStateCommon;
     device: Device;
 }
 

@@ -24,7 +24,8 @@ const io: ServerAug = new Server(server, {
     cors: {
         origin: '*',
         methods: ['GET', 'POST'],
-    }
+    },
+    serveClient: false,
 })
 
 io.on('connection', (socket) => handleWS(socket, io));
