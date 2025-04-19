@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { useFonts, BrunoAceSC_400Regular } from '@expo-google-fonts/bruno-ace-sc';
 import useStaffStore from '../stores/staffStore';

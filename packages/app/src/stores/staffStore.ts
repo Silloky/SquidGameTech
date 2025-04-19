@@ -8,6 +8,7 @@ const useStaffStore = create<StaffStateApp>()((set) => ({
     isLoggedIn: false,
     token: null,
     username: null,
+    name: null,
     permissions: {} as Permissions, // Initialize with an empty Permissions object
     login: async (username, password) => {
         const authData: AuthReq = {
@@ -31,6 +32,7 @@ const useStaffStore = create<StaffStateApp>()((set) => ({
         socket.on('connect', () => {
             set({
                 token: authRes.token,
+                name: authRes.name,
                 username: username,
                 permissions: new Permissions(authRes.permissions),
                 socket: socket

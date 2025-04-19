@@ -43,6 +43,7 @@ export default async function handleWS(socket: ServerSocketAug, io: ServerAug) {
             token: token,
             username: staff.username,
             permissions: new Permissions(await calculateOverallPermissions(staff.roles, staff.grantedPermissions, staff.deniedPermissions)),
+            name: staff.name
         };
         socket.data.user = staffState;
         socket.emit("connected");
@@ -55,9 +56,9 @@ export default async function handleWS(socket: ServerSocketAug, io: ServerAug) {
                 )
             }
             if ((await DevicesModel.countDocuments({$and: [{username: socket.data.user.username}, {live: true}]})) == 0){
-                StaffModel.findOneAndUpdate(
+                await StaffModel.findOneAndUpdate(
                     { username: socket.data.user.username },
-                    { $set: { online: false } }
+                    { online: false }
                 )
             }
         })

@@ -23,6 +23,7 @@ export interface StaffStateCommon {
     token: string | null;
     username: string | null;
     permissions: Permissions;
+    name: string | null;
 }
 
 export interface StaffStateApp extends StaffStateCommon {
