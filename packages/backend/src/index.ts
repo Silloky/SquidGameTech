@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import { authenticate } from './auth';
 import handleWS from './websocket/indexHandler';
 import { Server } from 'socket.io';
+import { instrument } from '@socket.io/admin-ui';
 import { ServerAug } from 'types';
 
 require('dotenv').config({ path: process.env.npm_lifecycle_event === 'prod' ? __dirname + '/../.env.prod' : __dirname + '/../.env.dev'});
@@ -22,10 +23,16 @@ const server = http.createServer(app);
 
 const io: ServerAug = new Server(server, {
     cors: {
-        origin: '*',
+        origin: ['*', 'https://admin.socket.io'],
         methods: ['GET', 'POST'],
+        credentials: true,
     },
     serveClient: false,
+})
+
+instrument(io, {
+    auth: false,
+    mode: 'development'
 })
 
 io.on('connection', (socket) => handleWS(socket, io));

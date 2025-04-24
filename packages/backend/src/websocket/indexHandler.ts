@@ -6,11 +6,12 @@ import { calculateOverallPermissions } from '../auth';
 import { ServerAug, ServerSocketAug } from 'types';
 import DevicesModel from '../models/deviceModel';
 
-type HandlerFunction = (eventName: string, data: any, socket: ServerSocketAug, ack?: Function) => void;
+type HandlerFunction = (eventName: string, data: any, socket: ServerSocketAug, io:ServerAug, ack?: Function) => void;
 
 const handlers: { [K in keyof ClientToServerEvents | `${string}.*`]?: HandlerFunction } = {
     'devices.*': require('./deviceHandler').default,
     'games.*': require('./games/gamesHandler').default,
+    'entrance.*': require('./utilities/entrance').default
 }
 
 export default async function handleWS(socket: ServerSocketAug, io: ServerAug) {
@@ -71,7 +72,7 @@ export default async function handleWS(socket: ServerSocketAug, io: ServerAug) {
                 if (eventName.match(regex)) {
                     const handler = handlers[eventPattern as keyof typeof handlers];
                     if (handler) {
-                        handler(eventName, data, socket, ack);
+                        handler(eventName, data, socket, io, ack);
                         handled = true;
                         break;
                     }

@@ -1,4 +1,4 @@
-import { ClientToServerEvents, ServerSocketAug, wsCodes } from "types";
+import { ClientToServerEvents, ServerSocketAug, ServerAug, wsCodes } from "types";
 import { Device } from "types";
 import DevicesModel from "../models/deviceModel";
 import typia from "typia";
@@ -24,13 +24,13 @@ const addDevice = async (data: Device, ack: (response: { code: number; data: (De
     ack({ code: wsCodes.SUCCESS, data: newDevice.toJSON() });
 };
 
-// const logoffDevice = async (deviceId: Device['device'], ack: (response: { code: number; }) => void) => {
-//     const oldDoc = await DevicesModel.findOneAndUpdate({ id: deviceId }, { live: false });
-//     ack({ code: oldDoc ? wsCodes.SUCCESS : wsCodes.NO_ACTION });
-// };
-
-const modifyPurposes = async (data: { deviceId: Device['device'], newPurposes: Device['purposes'] }, ack: (response: { code: number; }) => void) => {
+const modifyPurposes = async (data: { deviceId: Device['device'], newPurposes: Device['purposes'] }, ack: (response: { code: number; }) => void, io: ServerAug, socket: ServerSocketAug) => {
     const oldDoc = await DevicesModel.findOneAndUpdate({ id: data.deviceId }, { purposes: data.newPurposes });
+    
+    if (data.newPurposes.includes('entrance-photographer')){
+        socket.join('entrance-notifier')
+    }
+    
     ack({ code: oldDoc ? wsCodes.SUCCESS : wsCodes.NO_ACTION });
 };
 
@@ -39,7 +39,7 @@ const removeDevice = async (deviceId: Device['device'], ack: (response: { code: 
     ack({ code: oldDoc ? wsCodes.SUCCESS : wsCodes.NO_ACTION });
 };
 
-export default async function deviceHandler(event: keyof ClientToServerEvents, data: any, socket: ServerSocketAug, ack: any) {
+export default async function deviceHandler(event: keyof ClientToServerEvents, data: any, socket: ServerSocketAug, io: ServerAug, ack: any) {
 
     try {
         if (event == 'devices.add') {
@@ -50,12 +50,6 @@ export default async function deviceHandler(event: keyof ClientToServerEvents, d
             } else {
                 ack({ code: wsCodes.INVALID_MESSAGE })
             }
-        // } else if (event == 'devices.logoff') {
-        //     if (typia.is<(ClientToServerEvents['devices.logoff'] extends (data: infer T, ack: any) => void ? T : never)>(data)) {
-        //         logoffDevice(data, ack);
-        //     } else {
-        //         ack({ code: wsCodes.INVALID_MESSAGE })
-        //     }
         } else if (event == "devices.remove") {
             if (typia.is<(ClientToServerEvents['devices.remove'] extends (data: infer T, ack: any) => void ? T : never)>(data)) {
                 removeDevice(data, ack)
@@ -64,7 +58,7 @@ export default async function deviceHandler(event: keyof ClientToServerEvents, d
             }
         } else if (event == 'devices.modifyPurposes') {
             if (typia.is<(ClientToServerEvents['devices.modifyPurposes'] extends (data: infer T, ack: any) => void ? T : never)>(data)) {
-                modifyPurposes(data, ack)
+                modifyPurposes(data, ack, io, socket)
             } else {
                 ack({ code: wsCodes.INVALID_MESSAGE })
             }

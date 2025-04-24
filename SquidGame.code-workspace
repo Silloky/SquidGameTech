@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"name": "✨ SquidGameTech",
+			"path": "."
+		},
+		{
+			"name": "📦 app",
+			"path": "packages/app"
+		},
+		{
+			"name": "🚀 backend",
+			"path": "packages/backend"
+		},
+		{
+			"name": "📦 types",
+			"path": "packages/types"
+		}
+	],
+	"settings": {}
+}

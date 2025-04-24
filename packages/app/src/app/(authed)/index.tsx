@@ -1,4 +1,4 @@
-import { Text, View, Button, StyleSheet } from "react-native";
+import { Text, View, Button, StyleSheet, TouchableOpacity } from "react-native";
 import useStaffStore from "@/stores/staffStore";
 import { router } from "expo-router";
 import { Colors } from "@/constants/Colors";
@@ -42,6 +42,7 @@ export default function Index() {;
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>Ongoing</Text>
           <MenuItem />
+          <TouchableOpacity onPress={() => router.push('/(authed)/entrance')}><Text>Entrance</Text></TouchableOpacity>
           <MenuItem />
           <MenuItem />
         </View>

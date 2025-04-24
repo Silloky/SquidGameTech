@@ -2,11 +2,7 @@ export class Permissions {
     // Each block must have an `all` property if it has children
     audio = {
         read: false,
-        write: {
-            output: false,
-            volume: false,
-            all: false
-        },
+        write: false,
         all: false
     };
     video = {
@@ -14,6 +10,25 @@ export class Permissions {
         write: false,
         all: false
     };
+    games = {
+        rlgl: {
+            eliminate: false,
+            override: false,
+            all: false,
+        },
+        draughts: {
+            eliminate: false,
+            teams: false,
+            all: false,
+        },
+
+    };
+    org = {
+        players: false,
+        entrance: false,
+        displayControl: false,
+        all: false,
+    }
     all = false;
 
     constructor(data?: string[]) {
@@ -51,28 +66,14 @@ export class Permissions {
 
     // Deserializes from an array of strings that are "granted" paths
     deserialize(paths: string[]): void {
-        this.clear();
+        const newPerms = new Permissions();
+        Object.assign(this.audio, newPerms.audio);
+        Object.assign(this.video, newPerms.video);
+        Object.assign(this.games, newPerms.games);
+        Object.assign(this.org, newPerms.org);
+        this.all = newPerms.all;
         paths.forEach(p => this.applyPermission(p, true));
         this.updateAllFlags(this);
-    }
-
-    // Clears everything to false
-    clear(): void {
-        this.audio = {
-            read: false,
-            write: {
-                output: false,
-                volume: false,
-                all: false
-            },
-            all: false
-        };
-        this.video = {
-            read: false,
-            write: false,
-            all: false
-        };
-        this.all = false;
     }
 
     // Applies a list of permission paths, either enabling or disabling them

@@ -1,5 +1,6 @@
 import { Device } from "./device";
 import { StaffStateCommon } from "./staff";
+import { Player } from './player'
 import { Server, Socket as ServerSocket} from "socket.io";
 import { Socket } from "socket.io-client";
 
@@ -15,19 +16,18 @@ export const wsCodes = {
     SERVER_ERROR: 5000,
     SUCCESS: 2000,
     UNEXISTENT_EVENT: 4010,
-    NO_ACTION: 4011
+    NO_ACTION: 4011,
+    NOT_FOUND: 4012
 }
 
 type NestedServerToClientEvents = {
     connected: () => void;
     message: (method: string) => void;
     error: (code: number, message: string) => void;
-    // devices: {
-    //     "add.confirm": (code: number, data: Device) => void;
-    //     "remove.confirm": (code: number, data: void) => void;
-    //     "logoff.confirm": (code: number, data: void) => void;
-    //     "modifyPurposes.confirm": (code: number, data: void) => void;
-    // }
+    entrance: {
+        presenceValidation: (data: { number: number; name: string }) => void;
+        photoTaken: (data: number) => void;
+    }
 }
 
 type NestedClientToServerEvents = {
@@ -38,10 +38,6 @@ type NestedClientToServerEvents = {
             data: Device, 
             ack: (response: { code: number; data: Device }) => void
         ) => void;
-        // logoff: (
-        //     data: Device['device'], 
-        //     ack: (response: { code: number; }) => void
-        // ) => void;
         remove: (
             data: Device['device'], 
             ack: (response: { code: number; }) => void
@@ -56,6 +52,24 @@ type NestedClientToServerEvents = {
         start: (game: any) => void;
         move: (move: any) => void;
     };
+    entrance: {
+        checkExistence: (
+            data: number, 
+            ack: (response: { code: number; name: string}) => void
+        ) => void;
+        validatePresence: (
+            data: number,
+            ack: (response: {code: number}) => void
+        ) => void;
+        putPhoto: (
+            data: {num: number, photo: Base64URLString},
+            ack: (response: {code: number}) => void
+        ) => void;
+        new: (
+            data: Player,
+            ack: (response: {code: number, data: {num: number}}) => void
+        ) => void;
+    }
 };
 
 // AI generated type for flattening nested objects
