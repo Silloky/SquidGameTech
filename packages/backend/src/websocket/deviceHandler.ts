@@ -29,6 +29,9 @@ const modifyPurposes = async (data: { deviceId: Device['device'], newPurposes: D
     
     if (data.newPurposes.includes('entrance-photographer')){
         socket.join('entrance-notifier')
+    } else if (data.newPurposes.includes('rlgl-eliminator') || data.newPurposes.includes('rlgl-finisher') || data.newPurposes.includes('rlgl-distanceAvg')){
+        socket.join('rlgl-participants')
+        socket.join('eliminationsNotifier')
     }
     
     ack({ code: oldDoc ? wsCodes.SUCCESS : wsCodes.NO_ACTION });

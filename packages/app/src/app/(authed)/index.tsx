@@ -43,6 +43,7 @@ export default function Index() {;
           <Text style={styles.sectionLabel}>Ongoing</Text>
           <MenuItem />
           <TouchableOpacity onPress={() => router.push('/(authed)/entrance')}><Text>Entrance</Text></TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push('/(authed)/rlgl')}><Text>Red light green light</Text></TouchableOpacity>
           <MenuItem />
           <MenuItem />
         </View>

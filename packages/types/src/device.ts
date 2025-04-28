@@ -4,7 +4,18 @@ export type Device = {
     osVersion: string | null;
     device: string | null;
     deviceType: string;
-    purposes: ('s-out' | 's-in' | 'v-in' | 'v-out' | 'gc-in' | 'gc-out' | 'entrance-photographer')[]; 
+    purposes: (
+        's-out' | 
+        's-in' | 
+        'v-in' | 
+        'v-out' | 
+        'gc-in' | 
+        'gc-out' | 
+        'entrance-photographer' |
+        'rlgl-eliminator' |
+        'rlgl-finisher' |
+        'rlgl-distanceAvg'
+    )[];
     // Sound output | Sound input | Video input | Video output | Game control input | Game control output
     live?: boolean;
 }

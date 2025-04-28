@@ -11,7 +11,8 @@ type HandlerFunction = (eventName: string, data: any, socket: ServerSocketAug, i
 const handlers: { [K in keyof ClientToServerEvents | `${string}.*`]?: HandlerFunction } = {
     'devices.*': require('./deviceHandler').default,
     'games.*': require('./games/gamesHandler').default,
-    'entrance.*': require('./utilities/entrance').default
+    'entrance.*': require('./utilities/entrance').default,
+    'players.eliminate': require('./games/eliminationHandler').default,
 }
 
 export default async function handleWS(socket: ServerSocketAug, io: ServerAug) {

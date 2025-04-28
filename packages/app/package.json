@@ -10,7 +10,7 @@
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "expo lint",
-    "dev": "expo start --dev-client"
+    "dev": "expo start --go"
   },
   "jest": {
     "preset": "jest-expo"

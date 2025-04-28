@@ -46,6 +46,7 @@ export const styles = StyleSheet.create({
     backgroundColor: Colors.dogwood,
     width: '100%',
     height: '100%',
-    padding: 15
+    padding: 15,
+    paddingBottom: 5
   },
 });

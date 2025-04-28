@@ -48,7 +48,7 @@ export default function NewOrLost() {
     )
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
     container: {
         backgroundColor: Colors.dogwood,
         height: "100%",

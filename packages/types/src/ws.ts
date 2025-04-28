@@ -27,6 +27,17 @@ type NestedServerToClientEvents = {
     entrance: {
         presenceValidation: (data: { number: number; name: string }) => void;
         photoTaken: (data: number) => void;
+    },
+    games: {
+        rlgl: {
+            start: () => void;
+            rl: (data: number) => void;
+            gl: (data: number) => void;
+            stop: () => void;
+        }
+    },
+    players: {
+        eliminated: (data: { playerId: number }) => void;
     }
 }
 
@@ -49,8 +60,24 @@ type NestedClientToServerEvents = {
         ) => void;
     };
     games: {
-        start: (game: any) => void;
-        move: (move: any) => void;
+        rlgl: {
+            start: (data: null, ack: (response: { code: number }) => void) => void;
+            stop: (data: null, ack: (response: { code: number }) => void) => void;
+            pause: (data: null, ack: (response: { code: number }) => void) => void;
+            resume: (data: null, ack: (response: { code: number }) => void) => void;
+            setAverageDistance: (
+                data: number, 
+                ack: (response: { code: number }) => void
+            ) => void;
+            playerFinished: (
+                data: null,
+                ack: (response: { code: number }) => void
+            ) => void;
+            timerOverride: (
+                data: number,
+                ack: (response: { code: number }) => void
+            ) => void;
+        }
     };
     entrance: {
         checkExistence: (
@@ -69,6 +96,12 @@ type NestedClientToServerEvents = {
             data: Player,
             ack: (response: {code: number, data: {num: number}}) => void
         ) => void;
+    };
+    players: {
+        eliminate: (
+            data: number,
+            ack: (response: {code: number}) => void
+        ) => void
     }
 };
 
@@ -77,7 +110,13 @@ type Flatten<T> = {
     [K in keyof T & (string | number)]: T[K] extends (...args: any) => any
     ? { event: K; callback: T[K] }
     : T[K] extends Record<string | number, any>
-    ? { [SubKey in keyof T[K] & (string | number)]: { event: `${K}.${SubKey}`; callback: T[K][SubKey] } }[keyof T[K] & (string | number)]
+    ? { [SubKey in keyof T[K] & (string | number)]: 
+            T[K][SubKey] extends (...args: any) => any 
+            ? { event: `${K}.${SubKey}`; callback: T[K][SubKey] }
+            : T[K][SubKey] extends Record<string | number, any>
+                ? { [SubSubKey in keyof T[K][SubKey] & (string | number)]: { event: `${K}.${SubKey}.${SubSubKey}`; callback: T[K][SubKey][SubSubKey] } }[keyof T[K][SubKey] & (string | number)]
+                : never
+      }[keyof T[K] & (string | number)]
     : never;
 }[keyof T & (string | number)];
 
