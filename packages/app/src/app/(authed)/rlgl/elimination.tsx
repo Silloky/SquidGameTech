@@ -55,9 +55,11 @@ export default function NewOrLost() {
 
     function validateElimination() {
         socket.emitWithAck('players.eliminate', playerNumber).then((res) => {
-            if (res.code == wsCodes.SUCCESS){
+            if (res.code == wsCodes.SUCCESS) {
                 setEliminations(eliminations + 1)
                 setTargetEliminations(targetEliminations - 1)
+                numberInput.current?.clear()
+            } else if (res.code == wsCodes.NO_ACTION){
                 numberInput.current?.clear()
             }
         })
